@@ -253,9 +253,7 @@ sudo apt install thunderbird
 
 ![Thunderbird 계정 연결](./image-22.png)
 
-메일함에서 SSH 접근에 사용할 수 있는 키 관련 정보를 확인했다.
-
-![SSH 키 정보 확인](./image-23.png)
+메일함에서 SSH 접근에 사용할 수 있는 키 관련 정보를 확인 후, `tom_ssh_key` 파일로 저장했다.
 
 ---
 
