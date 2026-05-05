@@ -92,7 +92,7 @@ PORT    STATE SERVICE  VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-인증서의 Common Name에서 호스트명이 **NIXHARD**임을 확인했다.
+인증서의 Common Name에서 호스트명이 **NIXHARD**임을 확인했다. 또한, 각 서비스에서 지원하는 명령어를 확인할 수 있었다.
 
 | Port | Service | Supported Capabilities / Commands                                                                       |
 | ---: | ------- | ------------------------------------------------------------------------------------------------------- |
@@ -344,11 +344,7 @@ Thunderbird에서 확인하지 못한 새로운 결정적 단서는 없었다. �
 
 ![MySQL 데이터베이스 열거](./image-38.png)
 
-테이블 내부를 확인하면서 플래그 후보 값을 찾았다.
-
-![MySQL 테이블 데이터 확인](./image-39.png)
-
-처음에는 다른 컬럼이 함정처럼 보였지만, 최종적으로 플래그 형식의 값을 확인할 수 있었다.
+테이블 내부를 확인하면서 최종적으로 플래그 형식의 값을 확인할 수 있었다.
 
 ![플래그 획득](./image-40.png)
 
