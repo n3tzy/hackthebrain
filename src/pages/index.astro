@@ -142,7 +142,15 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
         <img
           src="/images/humanoid-outline-android-neutral-blog-bg.png"
           alt="Lavender humanoid structure outline"
-          class="body-map-image"
+          class="body-map-image body-map-image-light"
+          loading="eager"
+          decoding="async"
+        />
+        <img
+          src="/images/humanoid-outline-android-neutral-blog-bg-dark.png"
+          alt=""
+          aria-hidden="true"
+          class="body-map-image body-map-image-dark"
           loading="eager"
           decoding="async"
         />
@@ -275,6 +283,11 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
     box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 9%, transparent);
   }
 
+  html[data-theme="dark"] .body-map-title span {
+    background: color-mix(in srgb, var(--background) 78%, var(--muted));
+    box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
   .body-map-image,
   .body-map-wire {
     position: absolute;
@@ -286,6 +299,19 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
   .body-map-image {
     display: block;
     object-fit: contain;
+    transition: opacity 180ms ease;
+  }
+
+  .body-map-image-dark {
+    opacity: 0;
+  }
+
+  html[data-theme="dark"] .body-map-image-light {
+    opacity: 0;
+  }
+
+  html[data-theme="dark"] .body-map-image-dark {
+    opacity: 1;
   }
 
   .body-map-wire {
@@ -329,6 +355,10 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
       transform 160ms ease;
   }
 
+  html[data-theme="dark"] .body-map-label {
+    text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 36%, transparent);
+  }
+
   .body-map-label::after {
     content: "";
     display: block;
@@ -353,6 +383,11 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
     box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 12%, transparent);
   }
 
+  html[data-theme="dark"] .body-map-label-box {
+    background: color-mix(in srgb, var(--background) 76%, var(--muted));
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
   .body-map-label-box::after {
     display: none;
   }
@@ -368,6 +403,11 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
     font-size: 0.68rem;
     font-weight: 700;
     line-height: 1;
+  }
+
+  html[data-theme="dark"] .body-map-count {
+    background: color-mix(in srgb, var(--accent) 24%, var(--background));
+    color: color-mix(in srgb, #ffffff 82%, var(--accent));
   }
 
   .body-map-label:hover,
