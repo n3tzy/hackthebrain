@@ -5,18 +5,69 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
-import getSortedPosts from "@/utils/getSortedPosts";
 import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
+import getPostsByTag from "@/utils/getPostsByTag";
+
+const bodyCategories = [
+  {
+    name: "AI",
+    tag: "ai",
+    href: "/tags/ai/",
+    labelX: 67,
+    labelY: 3.5,
+    lineX: 62,
+    lineY: 5.5,
+    targets: [{ x: 50, y: 4.8, showLine: true }],
+  },
+  {
+    name: "Hardware",
+    tag: "hardware",
+    href: "/tags/hardware/",
+    labelX: 80,
+    labelY: 34,
+    lineX: 73,
+    lineY: 34,
+    targets: [{ x: 57, y: 20.8, showLine: true }],
+  },
+  {
+    name: "Network",
+    tag: "network",
+    href: "/tags/network/",
+    labelX: 15,
+    labelY: 38,
+    lineX: 29,
+    lineY: 39,
+    targets: [{ x: 50, y: 38, showLine: true }],
+  },
+  {
+    name: "HTB",
+    tag: "htb",
+    href: "/tags/htb/",
+    labelX: 14,
+    labelY: 54,
+    lineX: 25,
+    lineY: 53,
+    targets: [{ x: 35.5, y: 51.5, showLine: true }],
+  },
+  {
+    name: "OSCP",
+    tag: "oscp",
+    href: "/tags/oscp/",
+    labelX: 72,
+    labelY: 91,
+    lineX: 69,
+    lineY: 91,
+    targets: [{ x: 50, y: 94, showLine: true }],
+  },
+];
 
 const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const bodyCategoriesWithCounts = bodyCategories.map(category => ({
+  ...category,
+  count: getPostsByTag(posts, category.tag).length,
+}));
 ---
 
 <Layout>
@@ -83,38 +134,76 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
       }
     </style>
 
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-b border-border": recentPosts.length > 0 },
-          ]}
+    <section id="humanoid-structure" class="pt-12 pb-6">
+      <h2 class="body-map-title">
+        <span>Security Map</span>
+      </h2>
+      <div class="body-map mx-auto">
+        <img
+          src="/images/humanoid-outline-android-neutral-blog-bg.png"
+          alt="Lavender humanoid structure outline"
+          class="body-map-image"
+          loading="eager"
+          decoding="async"
+        />
+        <svg
+          class="body-map-wire"
+          viewBox="0 0 100 100"
+          aria-hidden="true"
+          focusable="false"
         >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
+          {
+            bodyCategoriesWithCounts.map(category =>
+              category.targets
+                .filter(target => target.showLine !== false)
+                .map(target => (
+                  <g>
+                    <line
+                      x1={category.lineX}
+                      y1={category.lineY}
+                      x2={target.x}
+                      y2={target.y}
+                    />
+                    <circle cx={target.x} cy={target.y} r="1.25" />
+                  </g>
+                ))
+            )
+          }
+          {
+            bodyCategoriesWithCounts.flatMap(category =>
+              category.targets
+                .filter(target => target.showLine === false)
+                .map(target => <circle cx={target.x} cy={target.y} r="1.25" />)
+            )
+          }
+        </svg>
 
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-        </section>
-      )
-    }
+        {
+          bodyCategoriesWithCounts.map(category => (
+            <>
+              <a
+                href={category.href}
+                class="body-map-label body-map-label-box"
+                style={`--label-x: ${category.labelX}%; --label-y: ${category.labelY}%;`}
+              >
+                <span>{category.name}</span>
+                <span class="body-map-count" aria-label={`${category.count} posts`}>
+                  {category.count}
+                </span>
+              </a>
+              {category.targets.map(target => (
+                <a
+                  href={category.href}
+                  class="body-map-hit"
+                  style={`--target-x: ${target.x}%; --target-y: ${target.y}%;`}
+                  aria-label={`${category.name} posts`}
+                />
+              ))}
+            </>
+          ))
+        }
+      </div>
+    </section>
 
     <div class="my-8 text-center">
       <LinkButton href="/posts/">
@@ -135,3 +224,197 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
     }
   });
 </script>
+
+<style>
+  .body-map {
+    position: relative;
+    width: min(100%, 42rem);
+    aspect-ratio: 1;
+  }
+
+  .body-map-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 0 auto 1.6rem;
+    color: color-mix(in srgb, var(--accent) 72%, var(--foreground));
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .body-map-title::before,
+  .body-map-title::after {
+    content: "";
+    width: 2.25rem;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--accent) 55%, transparent)
+    );
+  }
+
+  .body-map-title::after {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 55%, transparent),
+      transparent
+    );
+  }
+
+  .body-map-title span {
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, #ffffff 90%, var(--muted));
+    padding: 0.45rem 0.85rem;
+    box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 9%, transparent);
+  }
+
+  .body-map-image,
+  .body-map-wire {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .body-map-image {
+    display: block;
+    object-fit: contain;
+  }
+
+  .body-map-wire {
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .body-map-wire line {
+    stroke: var(--accent);
+    stroke-linecap: round;
+    stroke-width: 0.32;
+    opacity: 0.58;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .body-map-wire circle {
+    fill: color-mix(in srgb, var(--accent) 46%, #ffffff);
+    stroke: #ffffff;
+    stroke-width: 0.35;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .body-map-label {
+    position: absolute;
+    left: var(--label-x);
+    top: var(--label-y);
+    z-index: 2;
+    translate: -50% -50%;
+    color: var(--accent);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1;
+    text-decoration: none;
+    text-shadow:
+      0 0 12px color-mix(in srgb, var(--accent) 28%, transparent),
+      0 1px 0 #ffffff;
+    transition:
+      color 160ms ease,
+      opacity 160ms ease,
+      transform 160ms ease;
+  }
+
+  .body-map-label::after {
+    content: "";
+    display: block;
+    height: 1px;
+    margin-top: 0.35rem;
+    background: currentColor;
+    opacity: 0.32;
+    transform: scaleX(0.72);
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease;
+  }
+
+  .body-map-label-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 46%, transparent);
+    border-radius: 0.25rem;
+    background: color-mix(in srgb, #ffffff 86%, var(--muted));
+    box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .body-map-label-box::after {
+    display: none;
+  }
+
+  .body-map-count {
+    display: inline-grid;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    place-items: center;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 16%, #ffffff);
+    color: color-mix(in srgb, var(--accent) 76%, var(--foreground));
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .body-map-label:hover,
+  .body-map-label:focus-visible {
+    color: color-mix(in srgb, var(--accent) 82%, var(--foreground));
+    transform: translateY(-1px);
+  }
+
+  .body-map-label:hover::after,
+  .body-map-label:focus-visible::after {
+    opacity: 0.75;
+    transform: scaleX(1);
+  }
+
+  .body-map-hit {
+    position: absolute;
+    left: var(--target-x);
+    top: var(--target-y);
+    z-index: 3;
+    height: 3.25rem;
+    width: 3.25rem;
+    translate: -50% -50%;
+    border-radius: 999px;
+  }
+
+  .body-map-hit:focus-visible {
+    outline: 2px dashed var(--accent);
+    outline-offset: 0.2rem;
+  }
+
+  @media (max-width: 640px) {
+    .body-map {
+      width: min(100%, 34rem);
+    }
+
+    .body-map-title {
+      margin-bottom: 1rem;
+      font-size: 0.72rem;
+    }
+
+    .body-map-label {
+      font-size: 0.82rem;
+    }
+
+    .body-map-hit {
+      height: 2.65rem;
+      width: 2.65rem;
+    }
+  }
+</style>

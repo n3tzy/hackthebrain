@@ -9,11 +9,21 @@ import Card from "@/components/Card.astro";
 import Pagination from "@/components/Pagination.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
 import getPostsByTag from "@/utils/getPostsByTag";
+import { slugifyStr } from "@/utils/slugify";
 import { SITE } from "@/config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("blog");
-  const tags = getUniqueTags(posts);
+  const bodyMapTags = ["AI", "HTB", "Hardware", "Network", "OSCP"].map(
+    tagName => ({
+      tag: slugifyStr(tagName),
+      tagName,
+    })
+  );
+  const tags = [...getUniqueTags(posts), ...bodyMapTags].filter(
+    (value, index, self) =>
+      self.findIndex(tag => tag.tag === value.tag) === index
+  );
 
   return tags.flatMap(({ tag, tagName }) => {
     const tagPosts = getPostsByTag(posts, tag);
@@ -39,12 +49,49 @@ const { page, tagName } = Astro.props;
     pageDesc={`All the articles with the tag "${tagName}".`}
   >
     <h1 slot="title" transition:name={tag}>{`Tag:${tag}`}</h1>
-    <ul>
-      {page.data.map(data => <Card {...data} />)}
-    </ul>
+    {
+      page.data.length > 0 ? (
+        <ul>
+          {page.data.map(data => (
+            <Card {...data} />
+          ))}
+        </ul>
+      ) : (
+        <section class="empty-tag-state" aria-label={`${tagName} coming soon`}>
+          <div class="empty-tag-kicker">Coming soon</div>
+          <p>
+            This node is mapped, but the first {tagName} write-up has not landed
+            yet.
+          </p>
+        </section>
+      )
+    }
   </Main>
 
   <Pagination {page} />
 
   <Footer noMarginTop={page.lastPage > 1} />
 </Layout>
+
+<style>
+  .empty-tag-state {
+    margin-block: 2.5rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+    border-radius: 0.25rem;
+    background: color-mix(in srgb, #ffffff 88%, var(--muted));
+    padding: 1.4rem 1.5rem;
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  .empty-tag-kicker {
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .empty-tag-state p {
+    margin-top: 0.6rem;
+    opacity: 0.72;
+  }
+</style>
