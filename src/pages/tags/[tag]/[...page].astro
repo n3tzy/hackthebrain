@@ -83,6 +83,14 @@ const { page, tagName } = Astro.props;
     box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 10%, transparent);
   }
 
+  html[data-theme="dark"] .empty-tag-state {
+    border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+    background: color-mix(in srgb, var(--background) 78%, var(--muted));
+    box-shadow:
+      0 0 22px color-mix(in srgb, var(--accent) 13%, transparent),
+      inset 0 1px 0 color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
   .empty-tag-kicker {
     color: var(--accent);
     font-size: 1.25rem;
@@ -90,8 +98,17 @@ const { page, tagName } = Astro.props;
     line-height: 1.2;
   }
 
+  html[data-theme="dark"] .empty-tag-kicker {
+    text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+
   .empty-tag-state p {
     margin-top: 0.6rem;
     opacity: 0.72;
+  }
+
+  html[data-theme="dark"] .empty-tag-state p {
+    color: color-mix(in srgb, var(--foreground) 82%, var(--accent));
+    opacity: 0.8;
   }
 </style>
