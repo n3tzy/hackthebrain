@@ -136,7 +136,9 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
 
     <section id="humanoid-structure" class="pt-12 pb-6">
       <h2 class="body-map-title">
-        <span>Security Map</span>
+        <span class="body-map-title-pill">
+          <span class="body-map-title-text">Humanoid Security Map</span>
+        </span>
       </h2>
       <div class="body-map mx-auto">
         <img
@@ -275,15 +277,23 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
     );
   }
 
-  .body-map-title span {
+  .body-map-title-pill {
+    display: inline-flex;
+    align-items: center;
     border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
     border-radius: 999px;
     background: color-mix(in srgb, #ffffff 90%, var(--muted));
     padding: 0.45rem 0.85rem;
     box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 9%, transparent);
+    white-space: nowrap;
   }
 
-  html[data-theme="dark"] .body-map-title span {
+  .body-map-title-text {
+    display: block;
+    transform: translateY(0.05rem);
+  }
+
+  html[data-theme="dark"] .body-map-title-pill {
     background: color-mix(in srgb, var(--background) 78%, var(--muted));
     box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 18%, transparent);
   }
