@@ -60,11 +60,11 @@ AI 백엔드: 로컬 컴퓨터에서 구동되는 경량 LLM (Ollama - Llama 3 8
 | **2) Llama 3 (8B) 모델 가동** | 터미널(CMD/PowerShell)에서 `ollama run llama3` 명령어를 실행하여 메타의 경량 LLM 자산 확보 |
 | **3) 하드웨어 요구사항 검토** | 로컬 컴퓨터의 그래픽카드 메모리(VRAM)가 **8GB 이상**일 경우 안정적이고 쾌적한 추론 환경 보장 |
 
-![alt text](image-45.png)
+(이미지: image-45.png)
 Download for Windows 클릭
-![alt text](image-46.png)
+(이미지: image-46.png)
 cmd 창에서 `ollama run llama3` 실행하여 llm 다운로드  
-![alt text](image-50.png)  
+(이미지: image-50.png)  
 설치 후 `/exit`로 대화창에서 탈출
 
 ---
@@ -74,7 +74,7 @@ cmd 창에서 `ollama run llama3` 실행하여 llm 다운로드
 
 C:\projects\AegisButler 프로젝트 폴더 생성
 
-![alt text](image-47.png)
+(이미지: image-47.png)
 ```bash
 # 가상환경 생성 및 활성화
 cd C:\projects\AegisButler
@@ -88,7 +88,7 @@ python -m venv venv
 pip install langchain langchain-community langchain-ollama streamlit
 ```
 
-![alt text](image-48.png)
+(이미지: image-48.png)
 **차단 발생**  
 
 에러 원인 : 윈도우 11의 애플리케이션 제어 정책인 Device Guard(WDAC)가 가상환경 내부 경로의 pip.exe 실행 파일을 신뢰할 수 없는 바이너리로 규정하여 실행 권한을 강제 차단  
@@ -100,7 +100,7 @@ python -m pip install langchain langchain-community langchain-ollama streamlit
 ```
 
 
-![alt text](image-51.png)
+(이미지: image-51.png)
 
 설치 성공  
 
@@ -121,7 +121,7 @@ print("이지스 버틀러 가동 중...\n")
 response = llm.invoke(question)
 print(response)
 ```
-![alt text](image-52.png)
+(이미지: image-52.png)
 
 ### 첫 테스트 결과
 로컬 LLM 자산이 사용자의 시스템 지침을 정확히 인지하여 정해진 컨텍스트 안에서 무결한 첫 응답을 정상 출력하는 것을 확인
