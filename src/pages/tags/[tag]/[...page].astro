@@ -14,7 +14,7 @@ import { SITE } from "@/config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("blog");
-  const bodyMapTags = ["AI", "HTB", "Hardware", "Network", "OSCP"].map(
+  const bodyMapTags = ["AI Lab", "HTB", "Hardware", "Network", "AI Security"].map(
     tagName => ({
       tag: slugifyStr(tagName),
       tagName,
