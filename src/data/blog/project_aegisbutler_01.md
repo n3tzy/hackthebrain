@@ -8,7 +8,7 @@ description: "윈도우 11 환경에서 로컬 LLM과 LangChain을 활용해 나
 ## 1. 프로젝트 개요
 
 | 항목 | 상세 내용 |
-| :--- | :--- |
+| :---- | :------ |
 | **프로젝트명** | **AegisButler** (신의 방패 `Aegis` + 집사 `Butler`) |
 | **개발 목적** | 전체적인 정기 구독 서비스 관리를 위한 **중앙 집중형 대시보드** 및 LangChain AI Agent 기반의 대화형 **챗봇** 서비스 구현 |
 | **타겟 사용자** | 개발자 본인 전용 |
@@ -17,8 +17,8 @@ description: "윈도우 11 환경에서 로컬 LLM과 LangChain을 활용해 나
 
 | 기획 축 | 현실적 문제 | 프로젝트를 통한 목표 |
 | :--- | :--- | :--- |
-| **비즈니스 관점<br>(구독 서비스 파편화)** | OTT, 음악 스트리밍, AI 등 정기 결제 플랫폼의 확장으로 인해 지출 현황, 다음 결제일, 서비스별 계정 자산 정보를 한눈에 파악하기 어렵고, 하나하나 결제 취소 URL 찾기 귀찮음 | **중앙 집중형 대시보드**를 구축하여 고정 지출을 가시화하고, 결제 취소의 복잡성을 해소하여 개인 자산 관리 편의성 극대화 |
-| **커리어 관점<br>(AI 보안 역량 강화)** | 개인 비서를 활용하여 최신 AI Agent 아키텍처 도입 시 프롬프트 인젝션, 권한 남용 등의 독특한 AI 취약점 존재 가능 | 발생 가능한 공격 표면을 정의 |
+| **구독 서비스 파편화** | OTT, 음악 스트리밍, AI 등 정기 결제 플랫폼의 확장으로 인해 지출 현황, 다음 결제일, 서비스별 계정 자산 정보를 한눈에 파악하기 어렵고, 하나하나 결제 취소 URL 찾기 귀찮음 | **중앙 집중형 대시보드**를 구축하여 고정 지출을 가시화하고, 결제 취소의 복잡성을 해소하여 개인 자산 관리 편의성 극대화 |
+| **AI 보안 역량 강화** | 개인 비서를 활용하여 최신 AI Agent 아키텍처 도입 시 프롬프트 인젝션, 권한 남용 등의 독특한 AI 취약점 존재 가능 | 발생 가능한 공격 표면을 정의 |
 
 ## 3. 요구사항 정의서
 
@@ -37,19 +37,19 @@ AI 백엔드: 로컬 컴퓨터에서 구동되는 경량 LLM (Ollama - Llama 3 8
 
 ### 전체 시스템 아키텍처 초안 (Architecture)
 
-[ User interface ] ────▶ Streamlit (Dashboard & Chatbot UI)
-                             │
-                             ▼
-[ Security Layer ] ────▶ Prompt Injection Guardrail (프롬프트 검증)
-                             │
-                             ▼
-[ AI Core Agent ]  ────▶ LangChain / LangGraph + 로컬 LLM (Ollama Llama3)
-                             │
-                             ▼
-[ Security Layer ] ────▶ SQL Validator (위험 쿼리 검증 및 차단)
-                             │
-                             ▼
-[ Database ]       ────▶ Local DB (SQLite / Password Encrypted)  
+```mermaid
+graph TD
+    UI["User Interface<br>Streamlit (Dashboard & Chatbot UI)"]
+    Agent["AI Core Agent<br>LangChain / LangGraph + 로컬 LLM (Ollama Llama3)"]
+    DB["Database<br>Local DB (SQLite / Password Encrypted)"]
+
+    UI --> Agent
+    Agent --> DB
+
+    style UI fill:#eff6ff,stroke:#3b82f6,stroke-width:2px
+    style Agent fill:#ecfdf5,stroke:#10b981,stroke-width:2px
+    style DB fill:#fcfafa,stroke:#6b7280,stroke-width:2px
+```
 
 ## 4. 개발 환경 구축 및 로컬 LLM 연동
 ### 4-1. Ollama 설치 및 Llama 3 모델 다운로드
@@ -60,11 +60,11 @@ AI 백엔드: 로컬 컴퓨터에서 구동되는 경량 LLM (Ollama - Llama 3 8
 | **2) Llama 3 (8B) 모델 가동** | 터미널(CMD/PowerShell)에서 `ollama run llama3` 명령어를 실행하여 메타의 경량 LLM 자산 확보 |
 | **3) 하드웨어 요구사항 검토** | 로컬 컴퓨터의 그래픽카드 메모리(VRAM)가 **8GB 이상**일 경우 안정적이고 쾌적한 추론 환경 보장 |
 
-(이미지: image-45.png)
+![alt text](./image-45.png)
 Download for Windows 클릭
-(이미지: image-46.png)
+![alt text](./image-46.png)
 cmd 창에서 `ollama run llama3` 실행하여 llm 다운로드  
-(이미지: image-50.png)  
+![alt text](./image-50.png)  
 설치 후 `/exit`로 대화창에서 탈출
 
 ---
@@ -74,7 +74,7 @@ cmd 창에서 `ollama run llama3` 실행하여 llm 다운로드
 
 C:\projects\AegisButler 프로젝트 폴더 생성
 
-(이미지: image-47.png)
+![alt text](./image-47.png)
 ```bash
 # 가상환경 생성 및 활성화
 cd C:\projects\AegisButler
@@ -88,7 +88,7 @@ python -m venv venv
 pip install langchain langchain-community langchain-ollama streamlit
 ```
 
-(이미지: image-48.png)
+![alt text](./image-48.png)
 **차단 발생**  
 
 에러 원인 : 윈도우 11의 애플리케이션 제어 정책인 Device Guard(WDAC)가 가상환경 내부 경로의 pip.exe 실행 파일을 신뢰할 수 없는 바이너리로 규정하여 실행 권한을 강제 차단  
@@ -100,7 +100,7 @@ python -m pip install langchain langchain-community langchain-ollama streamlit
 ```
 
 
-(이미지: image-51.png)
+![alt text](./image-51.png)
 
 설치 성공  
 
@@ -121,7 +121,7 @@ print("이지스 버틀러 가동 중...\n")
 response = llm.invoke(question)
 print(response)
 ```
-(이미지: image-52.png)
+![alt text](./image-52.png)
 
 ### 첫 테스트 결과
 로컬 LLM 자산이 사용자의 시스템 지침을 정확히 인지하여 정해진 컨텍스트 안에서 무결한 첫 응답을 정상 출력하는 것을 확인
