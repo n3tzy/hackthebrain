@@ -1,5 +1,5 @@
 ---
-title: "AI 보안 비서 'AegisButler' 개발기"
+title: "AI 보안 비서 'AegisButler' 개발기 1편"
 pubDatetime: 2026-07-02T17:15:00+09:00
 tags: ["LLM", "AI_Security", "LangChain", "Ollama", "SecOps", "AI"]
 description: "윈도우 11 환경에서 로컬 LLM과 LangChain을 활용해 나만의 구독 관리 비서를 구축하는 토이 프로젝트"
