@@ -37,19 +37,7 @@ AI 백엔드: 로컬 컴퓨터에서 구동되는 경량 LLM (Ollama - Llama 3 8
 
 ### 전체 시스템 아키텍처 초안 (Architecture)
 
-```mermaid
-graph TD
-    UI["User Interface<br>Streamlit (Dashboard & Chatbot UI)"]
-    Agent["AI Core Agent<br>LangChain / LangGraph + 로컬 LLM (Ollama Llama3)"]
-    DB["Database<br>Local DB (SQLite / Password Encrypted)"]
-
-    UI --> Agent
-    Agent --> DB
-
-    style UI fill:#eff6ff,stroke:#3b82f6,stroke-width:2px
-    style Agent fill:#ecfdf5,stroke:#10b981,stroke-width:2px
-    style DB fill:#fcfafa,stroke:#6b7280,stroke-width:2px
-```
+![alt text](./image-53.png)
 
 ## 4. 개발 환경 구축 및 로컬 LLM 연동
 ### 4-1. Ollama 설치 및 Llama 3 모델 다운로드
