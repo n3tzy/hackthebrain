@@ -1,5 +1,4 @@
 ---
-import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
@@ -15,6 +14,7 @@ type Props = {
   pubDatetime?: Date;
   modDatetime?: Date | null;
   scrollSmooth?: boolean;
+  noindex?: boolean;
 };
 
 const {
@@ -23,28 +23,59 @@ const {
   profile = SITE.profile,
   description = SITE.desc,
   ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
-  canonicalURL = new URL(Astro.url.pathname, Astro.url),
+  canonicalURL = new URL(Astro.url.pathname, SITE.website).href,
   pubDatetime,
   modDatetime,
   scrollSmooth = false,
+  noindex = false,
 } = Astro.props;
 
-const socialImageURL = new URL(ogImage, Astro.url);
+const socialImageURL = new URL(ogImage, SITE.website);
 
+const person = {
+  "@type": "Person",
+  "@id": new URL("#person", SITE.website).href,
+  name: SITE.author,
+  alternateName: "Netzy",
+  url: new URL("about/", SITE.website).href,
+  sameAs: [SITE.profile],
+  description: "AI Security · LLM Security · AI Red Teaming",
+};
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: `${title}`,
-  image: `${socialImageURL}`,
-  datePublished: `${pubDatetime?.toISOString()}`,
-  ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-  author: [
-    {
-      "@type": "Person",
-      name: `${author}`,
-      ...(profile && { url: profile }),
-    },
-  ],
+  "@graph": pubDatetime
+    ? [
+        {
+          "@type": "BlogPosting",
+          "@id": canonicalURL + "#article",
+          headline: title,
+          description,
+          image: socialImageURL.href,
+          datePublished: pubDatetime.toISOString(),
+          dateModified: (modDatetime ?? pubDatetime).toISOString(),
+          mainEntityOfPage: canonicalURL,
+          inLanguage: SITE.lang,
+          author: {
+            ...person,
+            name: author,
+            ...(profile && { sameAs: [profile] }),
+          },
+        },
+      ]
+    : Astro.url.pathname === "/"
+      ? [
+          person,
+          {
+            "@type": "WebSite",
+            "@id": new URL("#website", SITE.website).href,
+            url: SITE.website,
+            name: SITE.title,
+            description,
+            inLanguage: SITE.lang,
+            author: { "@id": person["@id"] },
+          },
+        ]
+      : [{ "@type": "WebPage", url: canonicalURL, name: title, description }],
 };
 ---
 
@@ -61,20 +92,18 @@ const structuredData = {
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Load Font -->
-    <Font
-      cssVariable="--font-google-sans-code"
-      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
-    />
-
     <!-- General Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={pubDatetime ? "article" : "website"} />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content="ko_KR" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
@@ -109,7 +138,7 @@ const structuredData = {
     <script
       type="application/ld+json"
       is:inline
-      set:html={JSON.stringify(structuredData)}
+      set:html={JSON.stringify(structuredData).replaceAll("<", "\u003c")}
     />
 
     <!-- Enable RSS feed auto-discovery  -->

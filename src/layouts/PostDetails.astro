@@ -1,5 +1,7 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import RelatedTopics from "@/components/RelatedTopics.astro";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
@@ -40,6 +42,19 @@ const {
 const { Content } = await render(post);
 
 const slug = post.id;
+const isAI = tags.some(tag => ["ai-security", "llm"].includes(slugifyStr(tag)));
+const isLLM = tags.some(tag => slugifyStr(tag) === "llm");
+const breadcrumbs = [
+  ...(isAI
+    ? [
+        { name: "AI Security", href: "/ai-security/" },
+        ...(isLLM
+          ? [{ name: "LLM Security", href: "/ai-security/llm-security/" }]
+          : []),
+      ]
+    : [{ name: "Blog", href: "/posts/" }]),
+  { name: title, href: getPath(post.id, post.filePath) + "/" },
+];
 
 let ogImageUrl: string | undefined;
 
@@ -56,9 +71,7 @@ if (!ogImageUrl && SITE.dynamicOgImage) {
 }
 
 // Resolve OG image URL (or fallback to SITE.ogImage / default `og.png`)
-const ogImage = ogImageUrl
-  ? new URL(ogImageUrl, Astro.url.origin).href
-  : undefined;
+const ogImage = ogImageUrl ? new URL(ogImageUrl, SITE.website).href : undefined;
 
 const layoutProps = {
   title: `${title} | ${SITE.title}`,
@@ -88,6 +101,7 @@ const nextPost =
 
 <Layout {...layoutProps}>
   <Header />
+  <Breadcrumb items={breadcrumbs} />
   <BackButton />
   <main
     id="main-content"
@@ -103,7 +117,10 @@ const nextPost =
     <div class="my-2 flex items-center gap-2">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
       <span aria-hidden="true" class="opacity-80">|</span>
-      <span id="header-likes" class="flex items-center gap-x-1 text-sm opacity-80">
+      <span
+        id="header-likes"
+        class="flex items-center gap-x-1 text-sm opacity-80"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"
@@ -116,7 +133,9 @@ const nextPost =
           stroke-linejoin="round"
           class="inline-block"
         >
-          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+          <path
+            d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+          ></path>
         </svg>
         <span id="header-like-count">-</span>
       </span>
@@ -137,6 +156,7 @@ const nextPost =
       <Content />
     </article>
 
+    {isAI && <RelatedTopics />}
     <hr class="my-8 border-dashed" />
 
     <EditPost class="sm:hidden" {hideEditPost} {post} />
@@ -311,7 +331,9 @@ const nextPost =
    *  allowing sharing of sections easily */
   function addHeadingLinks() {
     const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
+      document.querySelectorAll(
+        "#article h2[id], #article h3[id], #article h4[id], #article h5[id], #article h6[id]"
+      )
     );
     for (const heading of headings) {
       heading.classList.add("group");

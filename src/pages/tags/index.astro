@@ -13,7 +13,10 @@ const posts = await getCollection("blog");
 let tags = getUniqueTags(posts);
 ---
 
-<Layout title={`Tags | ${SITE.title}`}>
+<Layout
+  description="주제별 태그로 NETZY의 보안 연구와 기술 기록을 탐색합니다."
+  title={`Tags | ${SITE.title}`}
+>
   <Header />
   <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
     <ul class="flex flex-wrap gap-6">

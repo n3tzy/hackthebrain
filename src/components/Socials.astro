@@ -8,7 +8,7 @@ import LinkButton from "./LinkButton.astro";
     SOCIALS.map(social =>
       social.name === "Mail" ? (
         <button
-          class="group inline-flex cursor-pointer items-center gap-1 p-2 outline-offset-1 outline-accent hover:rotate-6 hover:text-accent focus-visible:outline-2 focus-visible:outline-dashed focus-visible:no-underline sm:p-1"
+          class="group inline-flex cursor-pointer items-center gap-1 p-2 outline-offset-1 outline-accent hover:rotate-6 hover:text-accent focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-dashed sm:p-1"
           data-copy-email={social.href.replace("mailto:", "")}
           title={social.linkTitle}
           aria-label={social.linkTitle}
@@ -42,9 +42,8 @@ import LinkButton from "./LinkButton.astro";
 
 <script>
   document.addEventListener("astro:page-load", () => {
-    const buttons = document.querySelectorAll<HTMLButtonElement>(
-      "[data-copy-email]"
-    );
+    const buttons =
+      document.querySelectorAll<HTMLButtonElement>("[data-copy-email]");
     const toast = document.getElementById("copy-toast");
     let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -66,7 +65,7 @@ import LinkButton from "./LinkButton.astro";
             toast.style.transform = "translateX(-50%) translateY(16px)";
           }, 2000);
         } catch {
-          console.error("클립보드 복사 실패");
+          window.location.href = `mailto:${email}`;
         }
       });
     });

@@ -2,7 +2,7 @@
 import IconX from "@/assets/icons/IconX.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
-import IconArchive from "@/assets/icons/IconArchive.svg";
+import IconGitHub from "@/assets/icons/IconGitHub.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import LinkButton from "./LinkButton.astro";
@@ -14,12 +14,18 @@ const { pathname } = Astro.url;
 const currentPath =
   pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
 
-const isActive = (path: string) => {
-  const currentPathArray = currentPath.split("/").filter(p => p.trim());
-  const pathArray = path.split("/").filter(p => p.trim());
-
-  return currentPath === path || currentPathArray[0] === pathArray[0];
-};
+const links = [
+  ["/ai-security", "AI Security"],
+  ["/case-studies", "Case Studies"],
+  ["/ai-security/methodology", "Methodology"],
+  ["/posts", "Blog"],
+  ["/about", "About"],
+];
+const isActive = (path: string) =>
+  path === "/ai-security"
+    ? currentPath.startsWith(path) &&
+      !currentPath.startsWith("/ai-security/methodology")
+    : currentPath === path || currentPath.startsWith(path + "/");
 ---
 
 <a
@@ -31,30 +37,30 @@ const isActive = (path: string) => {
 </a>
 
 <header
-  class="app-layout flex flex-col items-center justify-between sm:flex-row"
+  class="app-layout flex flex-col items-center justify-between md:flex-row"
 >
   <div
     id="top-nav-wrap"
     class:list={[
-      "py-4 sm:py-6",
+      "py-4 md:py-6",
       "border-b border-border",
       "relative w-full bg-background",
-      "flex items-baseline justify-between sm:items-center",
+      "flex items-baseline justify-between md:flex-col md:items-center md:gap-5",
     ]}
   >
     <a
       href="/"
-      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap md:static md:my-auto md:text-xl md:leading-none"
     >
       {SITE.title}
     </a>
     <nav
       id="nav-menu"
-      class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
+      class="flex w-full flex-col items-center md:ms-2 md:flex-row md:justify-center md:space-x-4 md:py-0"
     >
       <button
         id="menu-btn"
-        class="focus-outline self-end p-2 sm:hidden"
+        class="focus-outline self-end p-2 md:hidden"
         aria-label="Open Menu"
         aria-expanded="false"
         aria-controls="menu-items"
@@ -66,51 +72,34 @@ const isActive = (path: string) => {
         id="menu-items"
         class:list={[
           "mt-4 grid w-44 grid-cols-2 place-content-center gap-2",
-          "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-2 sm:[&>li>a]:py-1",
+          "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent md:[&>li>a]:px-2 md:[&>li>a]:py-1",
           "hidden",
-          "sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0",
+          "md:mt-0 md:flex md:w-auto md:gap-x-2 md:gap-y-0",
         ]}
       >
-        <li class="col-span-2">
-          <a href="/posts" class:list={{ "active-nav": isActive("/posts") }}>
-            Posts
-          </a>
-        </li>
-        <li class="col-span-2">
-          <a href="/tags" class:list={{ "active-nav": isActive("/tags") }}>
-            Tags
-          </a>
-        </li>
-        <li class="col-span-2">
-          <a href="/about" class:list={{ "active-nav": isActive("/about") }}>
-            About
-          </a>
-        </li>
         {
-          SITE.showArchives && (
+          links.map(([href, label]) => (
             <li class="col-span-2">
-              <LinkButton
-                href="/archives"
-                class:list={[
-                  "focus-outline flex justify-center p-3 sm:p-1",
-                  {
-                    "active-nav [&>svg]:stroke-accent": isActive("/archives"),
-                  },
-                ]}
-                title="Archives"
-                aria-label="archives"
+              <a
+                href={href + "/"}
+                aria-current={isActive(href) ? "page" : undefined}
+                class:list={{ "active-nav": isActive(href) }}
               >
-                <IconArchive class="hidden sm:inline-block" />
-                <span class="sm:sr-only">Archives</span>
-              </LinkButton>
+                {label}
+              </a>
             </li>
-          )
+          ))
         }
+        <li class="col-span-1 flex items-center justify-center">
+          <a href={SITE.profile} aria-label="NETZY on GitHub" title="GitHub"
+            ><IconGitHub /></a
+          >
+        </li>
         <li class="col-span-1 flex items-center justify-center">
           <LinkButton
             href="/search"
             class:list={[
-              "focus-outline flex p-3 sm:p-1",
+              "focus-outline flex p-3 md:p-1",
               { "[&>svg]:stroke-accent": isActive("/search") },
             ]}
             title="Search"
@@ -125,7 +114,7 @@ const isActive = (path: string) => {
             <li class="col-span-1 flex items-center justify-center">
               <button
                 id="theme-btn"
-                class="focus-outline relative size-12 p-4 sm:size-8 hover:[&>svg]:stroke-accent"
+                class="focus-outline relative size-12 p-4 md:size-8 hover:[&>svg]:stroke-accent"
                 title="Toggles light & dark"
                 aria-label="auto"
                 aria-live="polite"

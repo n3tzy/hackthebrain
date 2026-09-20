@@ -1,4 +1,9 @@
 ---
+import { Image } from "astro:assets";
+import humanoidLight from "../../public/images/humanoid-outline-android-neutral-blog-bg.png";
+import humanoidDark from "../../public/images/humanoid-outline-android-neutral-blog-bg-dark.png";
+import FeaturedCaseStudy from "@/components/FeaturedCaseStudy.astro";
+import { SITE } from "@/config";
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -54,7 +59,7 @@ const bodyCategories = [
   {
     name: "AI Security",
     tag: "ai-security",
-    href: "/tags/ai-security/",
+    href: "/ai-security/",
     labelX: 72,
     labelY: 79,
     lineX: 69,
@@ -70,46 +75,84 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
 }));
 ---
 
-<Layout>
+<Layout
+  title="NETZY — AI 보안 · LLM 보안 진단 | hackthebrain"
+  description={SITE.desc}
+>
   <Header />
   <main id="main-content" data-layout="index" class="app-layout">
     <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
-      <h1 class="sr-only">hackthebrain — by Netzy</h1>
+      <p class="font-mono text-sm text-accent">netzy@hackthebrain:~$ whoami</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight">
+        NETZY <span class="mt-2 block text-2xl text-accent">AI SECURITY</span>
+      </h1>
+      <p class="mt-5 text-sm">AI 보안 · LLM 보안 진단 · AI Red Teaming</p>
+      <p class="mt-4 max-w-xl leading-relaxed">
+        AI 애플리케이션과 LLM 기반 서비스의 보안 취약점을 분석하고,<br
+          class="hidden sm:block"
+        /> 공격 시나리오의 재현성과 실제 비즈니스 영향을 검증합니다.
+      </p>
+      <nav
+        aria-label="Explore AI Security"
+        class="mt-6 flex flex-wrap gap-x-5 gap-y-3 text-sm underline decoration-dashed underline-offset-4"
+      >
+        <a href="/ai-security/">AI Security</a><a href="/case-studies/"
+          >Case Studies</a
+        ><a href="/ai-security/methodology/">Methodology</a><a href="/posts/"
+          >Research / Blog</a
+        ><a href="/about/">About</a><a href={SITE.profile}>GitHub ↗</a>
+      </nav>
 
       <!-- Terminal widget -->
-      <div class="my-6 max-w-lg overflow-hidden rounded-xl border border-border shadow-sm">
+      <div
+        class="my-6 max-w-lg overflow-hidden rounded-xl border border-border shadow-sm"
+      >
         <!-- Title bar -->
-        <div class="flex items-center gap-2 px-4 py-2.5" style="background-color: var(--muted);">
+        <div
+          class="flex items-center gap-2 px-4 py-2.5"
+          style="background-color: var(--muted);"
+        >
           <span class="h-3 w-3 rounded-full" style="background:#ff5f57;"></span>
           <span class="h-3 w-3 rounded-full" style="background:#ffbd2e;"></span>
           <span class="h-3 w-3 rounded-full" style="background:#28c840;"></span>
-          <span class="mx-auto text-xs opacity-40">netzy@hackthebrain — zsh</span>
+          <span class="mx-auto text-xs opacity-40"
+            >netzy@hackthebrain — zsh</span
+          >
           <a
             target="_blank"
             href="/rss.xml"
             aria-label="rss feed"
             title="RSS Feed"
-            class="opacity-40 hover:opacity-80 transition-opacity"
+            class="opacity-40 transition-opacity hover:opacity-80"
           >
-            <IconRss width={14} height={14} class="stroke-current stroke-2 rtl:-rotate-90" />
+            <IconRss
+              width={14}
+              height={14}
+              class="stroke-current stroke-2 rtl:-rotate-90"
+            />
             <span class="sr-only">RSS Feed</span>
           </a>
         </div>
         <!-- Body -->
         <div class="space-y-1.5 px-5 py-4 font-mono text-sm">
           <div>
-            <span class="font-semibold text-accent">netzy@hackthebrain</span><span class="opacity-40">:~$</span>
+            <span class="font-semibold text-accent">netzy@hackthebrain</span
+            ><span class="opacity-40">:~$</span>
             <span class="ml-1">whoami</span>
           </div>
-          <div class="opacity-70 pl-2">Netzy</div>
+          <div class="pl-2 opacity-70">NETZY / AI Security</div>
           <div class="pt-2">
-            <span class="font-semibold text-accent">netzy@hackthebrain</span><span class="opacity-40">:~$</span>
+            <span class="font-semibold text-accent">netzy@hackthebrain</span
+            ><span class="opacity-40">:~$</span>
             <span class="ml-1">cat warning.txt</span>
           </div>
-          <div class="opacity-70 pl-2">Warning: contents may hack your brain.</div>
+          <div class="pl-2 opacity-70">
+            Warning: contents may hack your brain.
+          </div>
           <div class="pt-2">
-            <span class="font-semibold text-accent">netzy@hackthebrain</span><span class="opacity-40">:~$</span>
-            <span class="ml-1 terminal-cursor">▋</span>
+            <span class="font-semibold text-accent">netzy@hackthebrain</span
+            ><span class="opacity-40">:~$</span>
+            <span class="terminal-cursor ml-1">▋</span>
           </div>
         </div>
       </div>
@@ -117,7 +160,9 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
       {
         SOCIALS.length > 0 && (
           <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0 text-sm opacity-60">Social Links:</div>
+            <div class="me-2 mb-1 text-sm whitespace-nowrap opacity-60 sm:mb-0">
+              Social Links:
+            </div>
             <Socials />
           </div>
         )
@@ -129,10 +174,17 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
         animation: blink 1s step-end infinite;
       }
       @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
       }
     </style>
+
+    <FeaturedCaseStudy />
 
     <section id="humanoid-structure" class="pt-12 pb-6">
       <h2 class="body-map-title">
@@ -141,19 +193,23 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
         </span>
       </h2>
       <div class="body-map mx-auto">
-        <img
-          src="/images/humanoid-outline-android-neutral-blog-bg.png"
+        <Image
+          src={humanoidLight}
+          width={672}
+          format="webp"
           alt="Lavender humanoid structure outline"
           class="body-map-image body-map-image-light"
-          loading="eager"
+          loading="lazy"
           decoding="async"
         />
-        <img
-          src="/images/humanoid-outline-android-neutral-blog-bg-dark.png"
+        <Image
+          src={humanoidDark}
+          width={672}
+          format="webp"
           alt=""
           aria-hidden="true"
           class="body-map-image body-map-image-dark"
-          loading="eager"
+          loading="lazy"
           decoding="async"
         />
         <svg
@@ -197,7 +253,10 @@ const bodyCategoriesWithCounts = bodyCategories.map(category => ({
                 style={`--label-x: ${category.labelX}%; --label-y: ${category.labelY}%;`}
               >
                 <span>{category.name}</span>
-                <span class="body-map-count" aria-label={`${category.count} posts`}>
+                <span
+                  class="body-map-count"
+                  aria-label={`${category.count} posts`}
+                >
                   {category.count}
                 </span>
               </a>

@@ -1,0 +1,29 @@
+---
+const links = [
+  ["/ai-security/", "AI Security"],
+  ["/ai-security/llm-security/", "LLM Security"],
+  ["/ai-security/ai-red-teaming/", "AI Red Teaming"],
+  ["/ai-security/methodology/", "AI Security Assessment Methodology"],
+  ["/case-studies/", "Case Studies"],
+];
+---
+
+<nav
+  aria-label="Related AI Security topics"
+  class="my-8 border-t border-dashed pt-5"
+>
+  <p class="mb-3 text-sm opacity-70">Related topics / 이어서 탐색하기</p>
+  <ul class="flex flex-wrap gap-x-5 gap-y-3 text-sm">
+    {
+      links
+        .filter(([href]) => href !== Astro.url.pathname)
+        .map(([href, label]) => (
+          <li>
+            <a class="underline decoration-dashed underline-offset-4" {href}>
+              {label}
+            </a>
+          </li>
+        ))
+    }
+  </ul>
+</nav>

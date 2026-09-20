@@ -6,7 +6,12 @@ import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
 ---
 
-<Layout title={`404 Not Found | ${SITE.title}`}>
+<Layout
+  noindex
+  canonicalURL={new URL("404.html", SITE.website).href}
+  description="요청한 페이지를 찾을 수 없습니다. AI Security 허브 또는 블로그에서 기록을 찾아보세요."
+  title={`404 Not Found | ${SITE.title}`}
+>
   <Header />
 
   <main

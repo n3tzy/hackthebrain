@@ -1,6 +1,6 @@
 import satori from "satori";
 import { SITE } from "@/config";
-import loadGoogleFonts from "../loadGoogleFont";
+import loadLocalFonts from "../loadLocalFonts";
 
 export default async () => {
   return satori(
@@ -77,8 +77,8 @@ export default async () => {
                           {
                             type: "p",
                             props: {
-                              style: { fontSize: 72, fontWeight: "bold" },
-                              children: SITE.title,
+                              style: { fontSize: 58, fontWeight: "bold" },
+                              children: "NETZY / AI SECURITY",
                             },
                           },
                           {
@@ -122,7 +122,7 @@ export default async () => {
       width: 1200,
       height: 630,
       embedFont: true,
-      fonts: await loadGoogleFonts(SITE.title + SITE.desc + SITE.website),
+      fonts: await loadLocalFonts(),
     }
   );
 };

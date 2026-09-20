@@ -18,9 +18,26 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 ---
 
-<Layout title={`Posts | ${SITE.title}`}>
+<Layout
+  title={`Blog — Page ${page.currentPage} | ${SITE.title}`}
+  description={`NETZY의 기술 기록 ${page.currentPage}페이지. AI Security, AI Lab, Hardware, Network, HTB 관련 글을 탐색합니다.`}
+>
   <Header />
   <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
+    <nav
+      aria-label="Blog categories"
+      class="mb-8 flex flex-wrap gap-4 text-sm underline underline-offset-4"
+    >
+      {
+        [
+          ["ai-lab", "AI Lab"],
+          ["hardware", "Hardware"],
+          ["network", "Network"],
+          ["htb", "HTB"],
+          ["ai-security", "AI Security"],
+        ].map(([tag, label]) => <a href={`/tags/${tag}/`}>{label}</a>)
+      }<a href="/tags/">All tags</a><a href="/archives/">Archives</a>
+    </nav>
     <ul>
       {page.data.map(data => <Card {...data} />)}
     </ul>

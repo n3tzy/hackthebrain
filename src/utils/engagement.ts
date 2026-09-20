@@ -74,7 +74,7 @@ export async function getMultipleStats(
   slugs: string[]
 ): Promise<Map<string, { views: number; likes: number }>> {
   const map = new Map<string, { views: number; likes: number }>();
-  if (slugs.length === 0) return map;
+  if (!supabase || slugs.length === 0) return map;
 
   const { data, error } = await supabase
     .from("post_stats")
@@ -93,13 +93,13 @@ export async function getMultipleStats(
 
 // IP 해시로 조회수 기록 + liked 여부 확인
 export async function viewPost(slug: string): Promise<PostStats | null> {
+  if (!supabase) return null;
   const ipHash = await getCachedIpHash();
   const { data, error } = await supabase.rpc("view_post", {
     p_slug: slug,
     p_ip_hash: ipHash,
   });
   if (error) {
-    console.error("viewPost error:", error);
     return null;
   }
   const stats = data as PostStats;
@@ -111,13 +111,13 @@ export async function viewPost(slug: string): Promise<PostStats | null> {
 export async function toggleLike(
   slug: string
 ): Promise<{ likes: number; liked: boolean } | null> {
+  if (!supabase) return null;
   const ipHash = await getCachedIpHash();
   const { data, error } = await supabase.rpc("toggle_like", {
     p_slug: slug,
     p_ip_hash: ipHash,
   });
   if (error) {
-    console.error("toggleLike error:", error);
     return null;
   }
   return data as { likes: number; liked: boolean };

@@ -1,10 +1,10 @@
 export const SITE = {
   website: "https://hackthebrain.dev/",
-  author: "Netzy",
-  profile: "https://github.com/netzy",
-  desc: "Hack your brain",
+  author: "NETZY",
+  profile: "https://github.com/n3tzy",
+  desc: "NETZY의 AI Security 연구와 기술 기록. LLM 보안 진단, AI Red Teaming, 검증 가능한 공격 시나리오를 다룹니다.",
   title: "hackthebrain",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "og.png",
   lightAndDarkMode: true,
   postPerIndex: 4,
   postPerPage: 4,
@@ -14,10 +14,10 @@ export const SITE = {
   editPost: {
     enabled: false,
     text: "Edit page",
-    url: "https://github.com/netzy/hackthebrain/edit/main/",
+    url: "https://github.com/n3tzy/hackthebrain/edit/main/",
   },
   dynamicOgImage: true,
   dir: "ltr",
-  lang: "en",
+  lang: "ko",
   timezone: "Asia/Seoul",
 } as const;

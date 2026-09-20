@@ -13,6 +13,7 @@ HTB Academy Getting Started 모듈의 마지막 실습 머신이다. 가이드 �
 - **Root flag** 획득
 
 사용한 주요 기법:
+
 - Gobuster 디렉터리 열거
 - GetSimpleCMS 3.3.15 인증 우회 + 임의 파일 업로드 (CVE-2019-11231)
 - 리버스 셸 획득
@@ -31,7 +32,6 @@ nmap -sV --open -Pn -n <TARGET_IP>
 80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
 ```
 
-
 열린 포트: **22 (SSH)**, **80 (HTTP)**
 
 ### Gobuster 디렉터리 열거
@@ -43,6 +43,7 @@ gobuster dir -u http://<TARGET_IP> -w /usr/share/seclists/Discovery/Web-Content/
 ![gobuster 결과](./image-1.png)
 
 주목할 디렉터리:
+
 - `/admin` → 관리자 페이지
 - `/data` → 데이터 디렉터리 (디렉터리 리스팅 활성화)
 - `/theme` → 테마 디렉터리 (웹쉘 업로드 후 접근 경로)
@@ -88,6 +89,7 @@ echo -n "admin" | sha1sum
 ![CVE-2019-11231](./image-4.png)
 
 **CVE-2019-11231** 요약:
+
 - GetSimpleCMS 3.3.15 이하 버전의 `theme-edit.php`에서 입력값 검증 미흡
 - 인증 우회 후 임의 PHP 파일 업로드 가능
 - 업로드된 파일을 `/theme/` 경로에서 실행 가능 → **RCE**

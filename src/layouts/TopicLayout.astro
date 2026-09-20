@@ -1,0 +1,26 @@
+---
+import type { MarkdownLayoutProps } from "astro";
+import Layout from "./Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import FeaturedCaseStudy from "@/components/FeaturedCaseStudy.astro";
+import RelatedTopics from "@/components/RelatedTopics.astro";
+type Props = MarkdownLayoutProps<{
+  title: string;
+  heading: string;
+  description: string;
+}>;
+const { frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.title} description={frontmatter.description}>
+  <Header /><Breadcrumb />
+  <main id="main-content" class="app-layout pb-12" data-pagefind-body>
+    <p class="mb-3 font-mono text-xs text-accent">NETZY / AI SECURITY</p>
+    <h1 class="text-3xl font-bold">{frontmatter.heading}</h1>
+    <div class="app-prose mt-6 max-w-app"><slot /></div>
+    <FeaturedCaseStudy /><RelatedTopics />
+  </main>
+  <Footer />
+</Layout>
